@@ -108,9 +108,18 @@ def ejecutar_buscar_canciones_por_artista_popularidad(cupicharts: dict) -> None:
             - [Y] es la popularidad mínima ingresada por el usuario.
             - [Z] es la popularidad máxima ingresada por el usuario.
     """
-    # TODO 10: Implemente la función tal y como se describe en la documentación.
-    pass
-        
+    artista_buscado = input("Ingrese el nombre del artista: ")
+    popularidad_minima_buscada = int(input("Ingrese la popularidad mínima (0-100): "))
+    popularidad_maxima_buscada = int(input("Ingrese la popularidad máxima (0-100): "))
+
+    canciones_encontradas = c.buscar_canciones_por_artista_popularidad(cupicharts, artista_buscado, popularidad_minima_buscada, popularidad_maxima_buscada)
+
+    if not canciones_encontradas:
+        print(f"No se encontraron canciones del artista {artista_buscado} con popularidad entre {popularidad_minima_buscada} y {popularidad_maxima_buscada}.")
+    else:
+        print(f"Las canciones del artista {artista_buscado} con popularidad entre {popularidad_minima_buscada} y {popularidad_maxima_buscada} son:")
+        mostrar_canciones(canciones_encontradas)
+
 
 # Función 3:
 def ejecutar_buscar_canciones_por_genero_anio_explicitud(cupicharts: dict) -> None:
@@ -138,8 +147,17 @@ def ejecutar_buscar_canciones_por_genero_anio_explicitud(cupicharts: dict) -> No
             - [Y] es el año de lanzamiento ingresado por el usuario.
             - [Z] es la opción de explícito ingresada por el usuario (True o False).
     """
-    # TODO 11: Implemente la función tal y como se describe en la documentación.
-    pass
+    artista_buscado = input("Ingrese el nombre del artista: ")
+    popularidad_minima_buscada = int(input("Ingrese la popularidad mínima (0-100): "))
+    popularidad_maxima_buscada = int(input("Ingrese la popularidad máxima (0-100): "))
+
+    canciones_encontradas = c.buscar_canciones_por_artista_popularidad(cupicharts, artista_buscado, popularidad_minima_buscada, popularidad_maxima_buscada)
+
+    if not canciones_encontradas:
+        print(f"No se encontraron canciones del artista {artista_buscado} con popularidad entre {popularidad_minima_buscada} y {popularidad_maxima_buscada}.")
+    else:
+        print(f"Las canciones del artista {artista_buscado} con popularidad entre {popularidad_minima_buscada} y {popularidad_maxima_buscada} son:")
+        mostrar_canciones(canciones_encontradas)
 
 # Función 4:
 def ejecutar_buscar_cancion_mas_escuchada(cupicharts: dict) -> None:
@@ -158,8 +176,13 @@ def ejecutar_buscar_cancion_mas_escuchada(cupicharts: dict) -> None:
             - "La canción más escuchada es: "
             Luego, se usa la función auxiliar mostrar_cancion() para mostrar la información de la canción encontrada.
     """
-    # TODO 12: Implemente la función tal y como se describe en la documentación.
-    pass
+    cancion_mas_escuchada = c.buscar_cancion_mas_escuchada(cupicharts)
+
+    if cancion_mas_escuchada is None:
+        print("No se encontraron canciones en Cupicharts.")
+    else:
+        print("La canción más escuchada es: ")
+        mostrar_cancion(cancion_mas_escuchada)
 
 
 # Función 5:
@@ -186,9 +209,13 @@ def ejecutar_obtener_apariciones_posicion(cupicharts: dict) -> None:
             - [X] es la posición del chart ingresada por el usuario.
             - [Y] es el número total de canciones que alcanzaron esa posición.
     """
-    # TODO 13: Implemente la función tal y como se describe en la documentación.
-    pass
-        
+    posicion_buscada = int(input("Ingrese la posición del chart a buscar: "))
+    numero_apariciones = c.obtener_apariciones_posicion(cupicharts, posicion_buscada)
+
+    if numero_apariciones > 0:
+        print(f"La posición #{posicion_buscada} fue alcanzada por {numero_apariciones} canciones.")
+    else:
+        print(f"No se encontraron canciones para la posición #{posicion_buscada}.")        
 
 # Función 6:
 def ejecutar_buscar_posicion_mas_frecuente(cupicharts: dict) -> None:
@@ -212,8 +239,12 @@ def ejecutar_buscar_posicion_mas_frecuente(cupicharts: dict) -> None:
             - [X] es el número de posición.
             - [Y] es el número total de canciones que alcanzaron esa posición.
     """
-    # TODO 14: Implemente la función tal y como se describe en la documentación.
-    pass
+    posicion_mas_frecuente, cantidad_canciones = c.buscar_posicion_mas_frecuente(cupicharts)
+
+    if posicion_mas_frecuente is None:
+        print("No se encontraron posiciones en Cupicharts.")
+    else:
+        print(f"La posición más frecuente es #{posicion_mas_frecuente} y fue alcanzada por {cantidad_canciones} canciones.")
 
 
 # Función 7:
@@ -267,8 +298,28 @@ def ejecutar_recomendar_cancion(cupicharts: dict) -> None:
             - "La canción recomendada es: "
             Luego, se usa la función auxiliar mostrar_cancion() para mostrar la información de la canción encontrada. 
     """
-    # TODO 15: Implemente la función tal y como se describe en la documentación.
-    pass
+    genero_buscado = input("Ingrese el género musical de la canción a buscar: ")
+    oyentes_minimos = int(input("Ingrese el número de oyentes mínimo: "))
+    duracion_minima = int(input("Ingrese la duración mínima de la canción en segundos: "))
+    duracion_maxima = int(input("Ingrese la duración máxima de la canción en segundos: "))
+    fecha_lanzamiento_minima = input("Ingrese la fecha de lanzamiento mínima (YYYY-MM-DD): ")
+    fecha_lanzamiento_maxima = input("Ingrese la fecha de lanzamiento máxima (YYYY-MM-DD): ")
+
+    cancion_recomendada = c.recomendar_cancion(
+        cupicharts,
+        genero_buscado,
+        oyentes_minimos,
+        duracion_minima,
+        duracion_maxima,
+        fecha_lanzamiento_minima,
+        fecha_lanzamiento_maxima
+    )
+
+    if cancion_recomendada is None:
+        print("No se encontró ninguna canción que cumpla con los criterios.")
+    else:
+        print("La canción recomendada es: ")
+        mostrar_cancion(cancion_recomendada)
 
 
 # Función 9:

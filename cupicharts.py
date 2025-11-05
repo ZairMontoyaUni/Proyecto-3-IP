@@ -71,32 +71,28 @@ def cargar_cupicharts(ruta_archivo: str) -> dict:
     # TODO 1: Implemente la función tal y como se describe en la documentación.
     
     dict_ppal = {}
-    with open(ruta_archivo, 'r', encoding = 'utf-8') as csv:
-        print(csv.readline().strip().split(','))
-    
-        for linea in csv:
-            l_csv = linea.strip().split(',')
-            
-            while linea != None:
-                print(l_csv)
-                print(len(l_csv)) 
-
-                title = l_csv[0]
-                chart_week = l_csv[1]
-                performer = l_csv[2]
-                peak_pos = int(l_csv[3])
-                wks_on_chart = int(l_csv[4])
-                album_name = l_csv[5]
-                release_date = l_csv[6]
-                popularity = int(l_csv[7]) 
-                explicit = l_csv[8]
-                listeners = int(l_csv[9])
-                play_count = int(l_csv[10])
-                duration_s = float(l_csv[11])
-                genre = l_csv[12].strip('\n').lower()
-                csv.readline()
+    with open(ruta_archivo, 'r', encoding = 'utf-8') as archivo:
+        linea = archivo.readline().strip()
+        while len(linea) > 0:
+            l_csv = linea.split(',')
+            title = l_csv[0]
+            chart_week = l_csv[1]
+            performer = l_csv[2]
+            peak_pos = l_csv[3]
+            wks_on_chart = l_csv[4]
+            album_name = l_csv[5]
+            release_date = l_csv[6]
+            popularity = l_csv[7]
+            explicit = l_csv[8]
+            listeners = l_csv[9]
+            play_count = l_csv[10]
+            duration_s = l_csv[11]
+            genre = l_csv[12].strip('\n').lower()
+            # leer la siguiente línea para avanzar en el archivo y evitar bucle infinito
+            linea = archivo.readline().strip()
+                
         
-        dict_canc = {'title': title,
+            dict_canc = {'title': title,
                      'chart_week': chart_week,
                      'performer': performer,
                      'peak_pos': peak_pos,
@@ -110,11 +106,10 @@ def cargar_cupicharts(ruta_archivo: str) -> dict:
                      'duration_s': duration_s,
                      'genre': genre}
         
-        if genre not in dict_ppal:
-            dict_ppal[genre] = []
-            
-        dict_ppal[genre].append(dict_canc)
-        
+            if genre not in dict_ppal:
+                dict_ppal[genre] = []
+            dict_ppal[genre].append(dict_canc)
+      
     return dict_ppal
         
 
@@ -141,14 +136,12 @@ def buscar_canciones_por_artista_popularidad(cupicharts: dict, artista_buscado: 
     # TODO 2: Implemente la función tal y como se describe en la documentación.
     
     respuesta = []
-    
     for genero in cupicharts:
         for cancion in cupicharts[genero]:
             if cancion['performer'] == artista_buscado:
-                
-                if popularidad_min <= cancion['popularity'] <= popularidad_max:
+                if popularidad_min <= int(cancion['popularity']) <= popularidad_max:
                     respuesta.append(cancion)
-                    
+    
     return respuesta
 
 # Función 3:
@@ -173,16 +166,14 @@ def buscar_canciones_por_genero_anio_explicitud(cupicharts: dict, genero_buscado
     # TODO 3: Implemente la función tal y como se describe en la documentación.
     
     respuesta = []
-    
-    for genero in cupicharts:
-        if genero == genero_buscado:
-            for cancion in cupicharts[genero]:
-                
-                anio_cancion = cancion['release_date'][:4]
-                
-                if anio_cancion == anio_lanzamiento_buscado and cancion['explicit'] == criterio_explicito_buscado:
-                    respuesta.append(cancion)
-                    
+    if genero_buscado in cupicharts:
+        for cancion in cupicharts[genero_buscado]:
+            anio_cancion = cancion['release_date'][:3]
+            print(anio_cancion)
+
+            if anio_cancion == anio_lanzamiento_buscado and cancion['explicit'] == criterio_explicito_buscado:
+                respuesta.append(cancion)
+
     return respuesta
 
 
@@ -207,10 +198,11 @@ def buscar_cancion_mas_escuchada(cupicharts: dict) -> dict:
     
     for genre in cupicharts:
         for cancion in cupicharts[genre]:
-            if cancion['play_count'] > max_reprod:
-                respuesta = cancion
-                
-    return respuesta
+            if int(cancion['play_count']) > max_reprod:
+                cancion_mas_escuchada = cancion
+                max_reprod = int(cancion['play_count'])
+
+    return cancion_mas_escuchada
 
 
 # Función 5:
@@ -227,7 +219,15 @@ def obtener_apariciones_posicion(cupicharts: dict, posicion_buscada: int) -> int
              Si no se encuentran canciones con dicha posición, retorna 0.
     """
     # TODO 5: Implemente la función tal y como se describe en la documentación.
-    pass
+    
+    contador = 0
+    
+    for genre in cupicharts:
+        for cancion in cupicharts[genre]:
+            if int(cancion['peak_pos']) == posicion_buscada:
+                contador += 1
+
+    return contador
 
 
 # Función 6:
@@ -249,7 +249,29 @@ def buscar_posicion_mas_frecuente(cupicharts: dict) -> dict:
             {"posicion": 0, "cantidad": 0}
     """
     # TODO 6: Implemente la función tal y como se describe en la documentación.
-    pass
+    
+    frecuencia_posiciones = {}
+    
+    for genre in cupicharts:
+        for cancion in cupicharts[genre]:
+            pos = int(cancion['peak_pos'])
+            if pos in frecuencia_posiciones:
+                frecuencia_posiciones[pos] += 1
+            else:
+                frecuencia_posiciones[pos] = 1
+    
+    posicion_mas_frecuente = 0
+    max_cantidad = 0
+    
+    for pos, cantidad in frecuencia_posiciones.items():
+        if cantidad > max_cantidad:
+            max_cantidad = cantidad
+            posicion_mas_frecuente = pos
+    
+    if max_cantidad == 0:
+        return {"posicion": 0, "cantidad": 0}
+    else:
+        return {"posicion": posicion_mas_frecuente, "cantidad": max_cantidad}
 
 
 # Función 7:
@@ -285,7 +307,17 @@ def crear_url_canciones(cupicharts: dict) -> None:
         https://docs.python.org/es/3/library/stdtypes.html#str.isalnum
     """
     # TODO 7: Implemente la función tal y como se describe en la documentación.
-    pass
+    
+    for genre in cupicharts:
+        for cancion in cupicharts[genre]:
+            genero_formateado = ''.join(char for char in cancion['genre'].lower() if char.isalnum())
+            titulo_artista = f"{cancion['title']}-{cancion['performer']}".lower()
+            titulo_artista_formateado = ''.join(char for char in titulo_artista if char.isalnum())
+            titulo_artista_formateado = titulo_artista_formateado[:30]
+            fecha_formateada = cancion['chart_week'].replace('-', '')
+            
+            url = f"https://www.cupicharts.com/canciones/{genero_formateado}/{titulo_artista_formateado}/{fecha_formateada}"
+            cancion['url'] = url
     
 
 # Función 8:
@@ -325,7 +357,19 @@ def recomendar_cancion(
                   Si no hay coincidencias o el diccionario está vacío, retorna un diccionario vacío.
     """
     # TODO 8: Implemente la función tal y como se describe en la documentación.
-    pass
+    posicion_mas_frecuente_info = buscar_posicion_mas_frecuente(cupicharts)
+    posicion_mas_frecuente = posicion_mas_frecuente_info['posicion']
+    cantidad_mas_frecuente = posicion_mas_frecuente_info['cantidad']
+
+    for genre in cupicharts:
+        for cancion in cupicharts[genre]:
+            if (cancion['peak_pos'] == posicion_mas_frecuente and
+                cancion['listeners'] >= listeners_min and
+                duracion_min <= cancion['duration_s'] <= duracion_max and
+                fecha_lanzamiento_min <= cancion['release_date'] <= fecha_lanzamiento_max):
+                return cancion
+
+    return {}
 
 
 # Función 9:
@@ -346,4 +390,18 @@ def relacionar_album_con_canciones(canciones: dict) -> dict:
             - Los valores (list) son listas con los nombres de las canciones del álbum.
     """
     # TODO 9: Implemente la función tal y como se describe en la documentación.
-    pass
+    
+    dict_ppal = {}
+    
+    for genre in canciones:
+        for cancion in canciones[genre]:
+            album_name = cancion['album_name']
+            title = cancion['title']
+            
+            if album_name not in dict_ppal:
+                dict_ppal[album_name] = []
+                dict_ppal[album_name] = []
+            if title not in dict_ppal[album_name]:
+                dict_ppal[album_name].append(title)
+    
+    return dict_ppal
