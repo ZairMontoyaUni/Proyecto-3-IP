@@ -73,6 +73,7 @@ def cargar_cupicharts(ruta_archivo: str) -> dict:
     dict_ppal = {}
     with open(ruta_archivo, 'r', encoding = 'utf-8') as archivo:
         linea = archivo.readline().strip()
+        linea = archivo.readline().strip()  # Leer la primera línea de datos, omitiendo la cabecera
         while len(linea) > 0:
             l_csv = linea.split(',')
             title = l_csv[0]
@@ -194,13 +195,13 @@ def buscar_cancion_mas_escuchada(cupicharts: dict) -> dict:
     # TODO 4: Implemente la función tal y como se describe en la documentación.
     
     cancion_mas_escuchada = {}
-    max_reprod = 0
+    max_reprod = "0"
     
     for genre in cupicharts:
         for cancion in cupicharts[genre]:
-            if int(cancion['play_count']) > max_reprod:
+            if cancion['play_count'] > max_reprod:
                 cancion_mas_escuchada = cancion
-                max_reprod = int(cancion['play_count'])
+                max_reprod = cancion['play_count']
 
     return cancion_mas_escuchada
 
@@ -255,10 +256,11 @@ def buscar_posicion_mas_frecuente(cupicharts: dict) -> dict:
     for genre in cupicharts:
         for cancion in cupicharts[genre]:
             pos = int(cancion['peak_pos'])
-            if pos in frecuencia_posiciones:
-                frecuencia_posiciones[pos] += 1
-            else:
+            
+            if pos not in frecuencia_posiciones:
                 frecuencia_posiciones[pos] = 1
+            else:
+                frecuencia_posiciones[pos] += 1
     
     posicion_mas_frecuente = 0
     max_cantidad = 0
@@ -267,11 +269,11 @@ def buscar_posicion_mas_frecuente(cupicharts: dict) -> dict:
         if cantidad > max_cantidad:
             max_cantidad = cantidad
             posicion_mas_frecuente = pos
-    
+    posi_d={"posicion": posicion_mas_frecuente, "cantidad": max_cantidad}
     if max_cantidad == 0:
         return {"posicion": 0, "cantidad": 0}
     else:
-        return {"posicion": posicion_mas_frecuente, "cantidad": max_cantidad}
+        return posi_d
 
 
 # Función 7:

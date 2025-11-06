@@ -210,6 +210,7 @@ def ejecutar_obtener_apariciones_posicion(cupicharts: dict) -> None:
             - [Y] es el número total de canciones que alcanzaron esa posición.
     """
     posicion_buscada = int(input("Ingrese la posición del chart a buscar: "))
+    
     numero_apariciones = c.obtener_apariciones_posicion(cupicharts, posicion_buscada)
 
     if numero_apariciones > 0:
@@ -239,13 +240,12 @@ def ejecutar_buscar_posicion_mas_frecuente(cupicharts: dict) -> None:
             - [X] es el número de posición.
             - [Y] es el número total de canciones que alcanzaron esa posición.
     """
-    posicion_mas_frecuente, cantidad_canciones = c.buscar_posicion_mas_frecuente(cupicharts)
+    diccionario = c.buscar_posicion_mas_frecuente(cupicharts)
 
-    if posicion_mas_frecuente is None:
+    if diccionario["cantidad"] == 0:
         print("No se encontraron posiciones en Cupicharts.")
     else:
-        print(f"La posición más frecuente es #{posicion_mas_frecuente} y fue alcanzada por {cantidad_canciones} canciones.")
-
+        print(f"La posición más frecuente es #{diccionario['posicion']} y fue alcanzada por {diccionario['cantidad']} canciones.")
 
 # Función 7:
 def ejecutar_crear_url_canciones(cupicharts: dict) -> None:
