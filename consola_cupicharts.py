@@ -115,9 +115,9 @@ def ejecutar_buscar_canciones_por_artista_popularidad(cupicharts: dict) -> None:
     canciones_encontradas = c.buscar_canciones_por_artista_popularidad(cupicharts, artista_buscado, popularidad_minima_buscada, popularidad_maxima_buscada)
 
     if not canciones_encontradas:
-        print(f"No se encontraron canciones del artista {artista_buscado} con popularidad entre {popularidad_minima_buscada} y {popularidad_maxima_buscada}.")
+        print('No se encontraron canciones del artista ' + artista_buscado + ' con popularidad entre ' + popularidad_minima_buscada + ' y ' + popularidad_maxima_buscada + '.')
     else:
-        print(f"Las canciones del artista {artista_buscado} con popularidad entre {popularidad_minima_buscada} y {popularidad_maxima_buscada} son:")
+        print('Las canciones del artista ' + artista_buscado + 'con popularidad entre ' + popularidad_minima_buscada + ' y ' + popularidad_maxima_buscada + 'son:')
         mostrar_canciones(canciones_encontradas)
 
 
@@ -154,9 +154,9 @@ def ejecutar_buscar_canciones_por_genero_anio_explicitud(cupicharts: dict) -> No
     canciones_encontradas = c.buscar_canciones_por_artista_popularidad(cupicharts, artista_buscado, popularidad_minima_buscada, popularidad_maxima_buscada)
 
     if not canciones_encontradas:
-        print(f"No se encontraron canciones del artista {artista_buscado} con popularidad entre {popularidad_minima_buscada} y {popularidad_maxima_buscada}.")
+        print('No se encontraron canciones del artista ' + artista_buscado + ' con popularidad entre ' + popularidad_minima_buscada + ' y ' + popularidad_maxima_buscada + '.')
     else:
-        print(f"Las canciones del artista {artista_buscado} con popularidad entre {popularidad_minima_buscada} y {popularidad_maxima_buscada} son:")
+        print('Las canciones del artista ' + artista_buscado + ' con popularidad entre ' + popularidad_minima_buscada + ' y ' + popularidad_maxima_buscada + 'son:')
         mostrar_canciones(canciones_encontradas)
 
 # Función 4:
@@ -213,9 +213,9 @@ def ejecutar_obtener_apariciones_posicion(cupicharts: dict) -> None:
     numero_apariciones = c.obtener_apariciones_posicion(cupicharts, posicion_buscada)
 
     if numero_apariciones > 0:
-        print(f"La posición #{posicion_buscada} fue alcanzada por {numero_apariciones} canciones.")
+        print('La posición # ' + posicion_buscada + ' fue alcanzada por ' + numero_apariciones + ' canciones.')
     else:
-        print(f"No se encontraron canciones para la posición #{posicion_buscada}.")        
+        print('No se encontraron canciones para la posición #' + posicion_buscada + '.')        
 
 # Función 6:
 def ejecutar_buscar_posicion_mas_frecuente(cupicharts: dict) -> None:
